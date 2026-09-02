@@ -1,42 +1,95 @@
+import React, { useState } from "react";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 import "./login.css";
 
 function Login() {
-	return (
-		<main className="login-page">
-			<section className="login-panel" aria-labelledby="login-title">
-				<div className="login-brand">
-					<span className="brand-mark">RC</span>
-					<span>Riders City Hub</span>
-				</div>
+  const [showPassword, setShowPassword] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-				<div className="login-heading">
-					<p className="eyebrow">Operations portal</p>
-					<h1 id="login-title">Welcome back</h1>
-					<p>Sign in to manage your city hub.</p>
-				</div>
+  function handleSubmit(event) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const username = String(form.get("username") || "").trim();
+    const password = String(form.get("password") || "");
 
-				<form className="login-form">
-					<label htmlFor="email">Email address</label>
-					<input id="email" name="email" type="email" placeholder="you@riderscityhub.ph" required />
+    if (!username || !password) {
+      setError("Please enter your username and password.");
+      return;
+    }
 
-					<div className="password-label">
-						<label htmlFor="password">Password</label>
-						<button type="button" className="forgot-button">Forgot password?</button>
-					</div>
-					<input id="password" name="password" type="password" placeholder="Enter your password" required />
+    setError("");
+    setSubmitting(true);
+    window.setTimeout(() => setSubmitting(false), 900);
+  }
 
-					<label className="remember-option">
-						<input type="checkbox" name="remember" />
-						<span>Keep me signed in</span>
-					</label>
+  return (
+    <main className="login-page">
+      <section className="login-card" aria-labelledby="login-title">
+        <div className="login-visual">
+          <div className="visual-copy">
+            <h2>Welcome to Riderscityhub.ph</h2>
+            <div className="visual-rule" />
+            <p>Let&apos;s keep your business running smoothly.</p>
+          </div>
+        </div>
 
-					<button type="submit" className="submit-button">Sign in</button>
-				</form>
+        <div className="login-form-side">
+          <div className="login-heading">
+            <h1 id="login-title">Get Started</h1>
+            <p>Manage. Sell. Ride.</p>
+          </div>
 
-				<p className="login-footer">Need access? Contact your hub administrator.</p>
-			</section>
-		</main>
-	);
+          <form className="login-form" onSubmit={handleSubmit} noValidate>
+            <label htmlFor="username">Enter your username or gmail</label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              autoComplete="username"
+              placeholder="you@riderscityhub.ph"
+            />
+
+            <div className="field-password">
+              <label htmlFor="password">Enter your password</label>
+              <span className="password-wrap">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  className="toggle-password"
+                  onClick={() => setShowPassword((value) => !value)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-pressed={showPassword}
+                >
+                  {showPassword ? <EyeIcon size={18} /> : <EyeOffIcon size={18} />}
+                </button>
+              </span>
+            </div>
+
+            <button type="button" className="forgot-button">
+              Forgot Password
+            </button>
+
+            {error ? (
+              <p className="login-error" role="alert">
+                {error}
+              </p>
+            ) : null}
+
+            <button type="submit" className="submit-button" disabled={submitting}>
+              {submitting ? "Signing in…" : "Login"}
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+  );
 }
 
 export default Login;
