@@ -1,9 +1,5 @@
 import { app, BrowserWindow } from "electron";
 import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -15,15 +11,17 @@ function createWindow() {
     }
   });
 
-  if (!app.isPackaged) {
-    // Development mode
-    mainWindow.loadURL("http://localhost:5173");
-  } else {
-    // Production mode
-    mainWindow.loadFile(
-      path.join(__dirname, "../dist/index.html")
-    );
-  }
+  const page = app.isPackaged
+    ? path.join(app.getAppPath(), "dist", "index.html")
+    : process.env.VITE_DEV_SERVER_URL || "http://localhost:5173";
+
+  const loadPage = app.isPackaged
+    ? mainWindow.loadFile(page)
+    : mainWindow.loadURL(page);
+
+  loadPage.catch((error) => {
+    console.error(`Unable to load Electron page: ${page}`, error);
+  });
 }
 
 app.whenReady().then(() => {
