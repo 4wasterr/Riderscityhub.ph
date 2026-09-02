@@ -1,0 +1,14 @@
+directories:
+  output: release-test
+  buildResources: build
+appId: com.riderscityhub.pos
+productName: Riders City Hub
+files:
+  - filter:
+      - dist/**/*
+      - electron/**/*
+win:
+  target:
+    - nsis
+    - portable
+electronVersion: 44.1.1
