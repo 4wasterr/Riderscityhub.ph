@@ -38,6 +38,11 @@ function Login() {
         </div>
 
         <div className="login-form-side">
+          <img
+            className="login-logo"
+            src="Images/f0ac9f40cf82f0aee7252a575074eec5-Photoroom.png"
+            alt="Riders City Hub logo"
+          />
           <div className="login-heading">
             <h1 id="login-title">Get Started</h1>
             <p>Manage. Sell. Ride.</p>
