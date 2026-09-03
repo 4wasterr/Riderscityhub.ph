@@ -28,6 +28,7 @@ function ForgotPassword({ onBackToLogin }) {
 		}
 
 		setError("");
+		onBackToLogin();
 	}
 
 	return (

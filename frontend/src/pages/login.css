@@ -280,8 +280,13 @@
 }
 
 
+.login-heading {
+    transform: translateY(-8px);
+}
+
+
 .login-heading p {
-    margin: 12px 0 0;
+    margin: 4px 0 0;
 
     color: var(--login-muted);
 
