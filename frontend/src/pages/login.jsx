@@ -32,6 +32,9 @@ function Login() {
             <div className="visual-rule" />
             <p>Let&apos;s keep your business running smoothly.</p>
           </div>
+          <img
+    src="Images/f384a9d5e0d8b2ea1d2f6b821d32c9d1.jpg"
+    alt="Login background"/>
         </div>
 
         <div className="login-form-side">
