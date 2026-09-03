@@ -11,9 +11,10 @@ function createWindow() {
     }
   });
 
+  const devServerUrl = process.env.VITE_DEV_SERVER_URL || "http://localhost:5173";
   const page = app.isPackaged
     ? path.join(app.getAppPath(), "dist", "index.html")
-    : process.env.VITE_DEV_SERVER_URL || "http://localhost:5173";
+    : devServerUrl;
 
   const loadPage = app.isPackaged
     ? mainWindow.loadFile(page)

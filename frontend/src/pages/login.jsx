@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import loginBackground from "../../Images/f384a9d5e0d8b2ea1d2f6b821d32c9d1.jpg";
+import loginLogo from "../../Images/f0ac9f40cf82f0aee7252a575074eec5-Photoroom.png";
 import "./login.css";
 
 function Login({ onForgotPassword }) {
@@ -33,14 +35,15 @@ function Login({ onForgotPassword }) {
             <p>Let&apos;s keep your business running smoothly.</p>
           </div>
           <img
-    src="Images/f384a9d5e0d8b2ea1d2f6b821d32c9d1.jpg"
-    alt="Login background"/>
+            src={loginBackground}
+            alt="Login background"
+          />
         </div>
 
         <div className="login-form-side">
           <img
             className="login-logo"
-            src="Images/f0ac9f40cf82f0aee7252a575074eec5-Photoroom.png"
+            src={loginLogo}
             alt="Riders City Hub logo"
           />
           <div className="login-heading">
