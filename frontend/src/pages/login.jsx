@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import "./login.css";
 
-function Login() {
+function Login({ onForgotPassword }) {
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -80,7 +80,7 @@ function Login() {
               </span>
             </div>
 
-            <button type="button" className="forgot-button">
+            <button type="button" className="forgot-button" onClick={onForgotPassword}>
               Forgot Password
             </button>
 
