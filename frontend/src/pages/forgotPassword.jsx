@@ -34,7 +34,7 @@ function ForgotPassword({ onBackToLogin }) {
 		<main className="forgot-page">
 			<section className="forgot-card" aria-labelledby="forgot-title">
 				<div className="forgot-content">
-					<h1 id="forgot-title">Riderscityhub.ph POS</h1>
+					<h1 id="forgot-title">Riderscityhub.ph</h1>
 					<p className="forgot-subtitle">Forgot your password?</p>
 
 					<form className="forgot-form" onSubmit={handleSubmit} noValidate>
