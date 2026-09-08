@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import "./forgotPassword.css";
