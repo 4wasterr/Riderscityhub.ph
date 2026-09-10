@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   Boxes,
@@ -18,7 +18,6 @@ import {
   X,
 } from "lucide-react";
 import "./userManagementUserList.css";
-import { initialUsers } from "./userData";
 
 const navItems = [
   { id: "Dashboard", label: "Dashboard", icon: Home },
@@ -35,8 +34,34 @@ function UserManagementUserList({ onLogout, onNavigate }) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [profileName, setProfileName] = useState("Admin");
 
-  // Users state
-  const [users, setUsers] = useState(initialUsers);
+  // Users state — loaded from DB
+  const [users, setUsers] = useState([]);
+
+  // Load users from DB on mount
+  useEffect(() => {
+    fetch('http://localhost:5000/api/users')
+      .then((res) => res.json())
+      .then((data) => {
+        if (!Array.isArray(data)) return;
+        const mapped = data.map((u) => ({
+          id: u.id,
+          userId: u.user_code || String(u.id),
+          username: u.username,
+          firstName: u.first_name,
+          middleName: u.middle_name || '',
+          lastName: u.last_name,
+          name: u.full_name || `${u.first_name} ${u.last_name}`.trim(),
+          role: u.role,
+          email: u.email,
+          phone: u.phone || '',
+          address: u.address || '',
+          status: u.status || 'Active',
+          createdAt: u.created_at,
+        }));
+        setUsers(mapped);
+      })
+      .catch((err) => console.error('Failed to load users:', err));
+  }, []);
 
   // Filters
   const [searchQuery, setSearchQuery] = useState("");
