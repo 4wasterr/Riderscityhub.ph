@@ -21,9 +21,22 @@ function Login({ onForgotPassword, onLogin }) {
       return;
     }
 
-    setError("");
+    if (username.toLowerCase() === "admin" && password === "admin") {
+      setError("");
+      setSubmitting(false);
+      onLogin("admin");
+      return;
+    }
+
+    if (username.toLowerCase() === "cashier" && password === "cashier") {
+      setError("");
+      setSubmitting(false);
+      onLogin("cashier");
+      return;
+    }
+
+    setError("Invalid credentials. Use admin/admin or cashier/cashier.");
     setSubmitting(false);
-    onLogin();
   }
 
   return (

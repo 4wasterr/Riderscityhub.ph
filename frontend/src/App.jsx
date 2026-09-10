@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import CashierSideDashboard from "./pages/cashierSideDashboard";
 import Dashboard from "./pages/dashboard";
 import ForgotPassword from "./pages/forgotPassword";
 import Inventory from "./pages/inventory";
@@ -14,6 +15,7 @@ import UserArchive from "./pages/userArchive";
 function App() {
   const [currentHash, setCurrentHash] = useState(window.location.hash);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [userRole, setUserRole] = useState("admin"); // "admin" or "cashier"
 
   useEffect(() => {
     function handleHashChange() {
@@ -51,6 +53,16 @@ function App() {
     window.location.hash = "";
   }
 
+  function handleLogin(role) {
+    setUserRole(role || "admin");
+    setIsAuthenticated(true);
+    if (role === "cashier") {
+      window.location.hash = "cashier-dashboard";
+    } else {
+      window.location.hash = "dashboard";
+    }
+  }
+
   const showForgotPassword = currentHash === "#forgot-password";
   const showUserArchive = isAuthenticated && currentHash === "#user-archive";
   const showUserAuditLogs = isAuthenticated && currentHash === "#user-audit-logs";
@@ -60,8 +72,11 @@ function App() {
   const showSettings = isAuthenticated && currentHash === "#settings";
   const showProducts = isAuthenticated && currentHash === "#products";
   const showInventory = isAuthenticated && currentHash === "#inventory";
+  const showCashierDashboard =
+    isAuthenticated && (userRole === "cashier" || currentHash === "#cashier-dashboard");
   const showDashboard =
     isAuthenticated &&
+    !showCashierDashboard &&
     !showUserArchive &&
     !showUserAuditLogs &&
     !showUserList &&
@@ -71,6 +86,10 @@ function App() {
     !showProducts &&
     !showInventory &&
     !showForgotPassword;
+
+  if (showCashierDashboard) {
+    return <CashierSideDashboard onLogout={handleLogout} onNavigate={handleNavigate} />;
+  }
 
   if (showUserArchive) {
     return <UserArchive onLogout={handleLogout} onNavigate={handleNavigate} />;
@@ -113,7 +132,7 @@ function App() {
   ) : (
     <Login
       onForgotPassword={() => { window.location.hash = "forgot-password"; }}
-      onLogin={() => setIsAuthenticated(true)}
+      onLogin={handleLogin}
     />
   );
 }
