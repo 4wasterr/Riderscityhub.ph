@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import PropTypes from "prop-types";
@@ -22,11 +23,8 @@ function Login({ onForgotPassword, onLogin }) {
     }
 
     setError("");
-    setSubmitting(true);
-    window.setTimeout(() => {
-      setSubmitting(false);
-      onLogin();
-    }, 500);
+    setSubmitting(false);
+    onLogin();
   }
 
   return (
