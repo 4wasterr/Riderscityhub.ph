@@ -335,6 +335,18 @@ function Dashboard({ onLogout, onNavigate }) {
                     if (item.id === "Inventory" && onNavigate) {
                       onNavigate("Inventory");
                     }
+                    if (item.id === "Products" && onNavigate) {
+                      onNavigate("Products");
+                    }
+                    if (item.id === "User Management" && onNavigate) {
+                      onNavigate("User Management");
+                    }
+                    if (item.id === "Supplier Module" && onNavigate) {
+                      onNavigate("Supplier Module");
+                    }
+                    if (item.id === "Settings" && onNavigate) {
+                      onNavigate("Settings");
+                    }
                   }}
                 >
                   <span className="rch-nav-icon">
@@ -593,23 +605,33 @@ function Dashboard({ onLogout, onNavigate }) {
                     </div>
                   </div>
 
-                  {/* Multi-Line Chart SVG */}
+                  {/* Multi-Line Chart Body */}
                   <div className="rch-line-chart-body">
-                    <div className="rch-svg-container">
-                      {/* Gridlines in SVG */}
-                      <svg
-                        className="rch-line-svg"
-                        viewBox="0 0 500 170"
-                        preserveAspectRatio="none"
-                      >
-                        {/* Horizontal guides */}
-                        <line x1="0" y1="10" x2="500" y2="10" stroke="#f0f2f5" strokeWidth="1" />
-                        <line x1="0" y1="48" x2="500" y2="48" stroke="#f0f2f5" strokeWidth="1" />
-                        <line x1="0" y1="86" x2="500" y2="86" stroke="#f0f2f5" strokeWidth="1" />
-                        <line x1="0" y1="124" x2="500" y2="124" stroke="#f0f2f5" strokeWidth="1" />
-                        <line x1="0" y1="162" x2="500" y2="162" stroke="#f0f2f5" strokeWidth="1" />
+                    {/* Y Axis Price Indicator */}
+                    <div className="rch-y-axis">
+                      <span>₱50k</span>
+                      <span>₱30k</span>
+                      <span>₱20k</span>
+                      <span>₱10k</span>
+                      <span>₱0k</span>
+                    </div>
 
-                        {/* Render each series */}
+                    <div className="rch-line-column-area">
+                      <div className="rch-svg-container">
+                        {/* Gridlines in SVG */}
+                        <svg
+                          className="rch-line-svg"
+                          viewBox="0 0 500 170"
+                          preserveAspectRatio="none"
+                        >
+                          {/* Horizontal guides */}
+                          <line x1="0" y1="10" x2="500" y2="10" stroke="#f0f2f5" strokeWidth="1" />
+                          <line x1="0" y1="48" x2="500" y2="48" stroke="#f0f2f5" strokeWidth="1" />
+                          <line x1="0" y1="86" x2="500" y2="86" stroke="#f0f2f5" strokeWidth="1" />
+                          <line x1="0" y1="124" x2="500" y2="124" stroke="#f0f2f5" strokeWidth="1" />
+                          <line x1="0" y1="162" x2="500" y2="162" stroke="#f0f2f5" strokeWidth="1" />
+
+                          {/* Render each series */}
                         {lineChartData[linePeriod].series.map((series) => {
                           const pointsString = series.points
                             .map((p) => `${p[0]},${p[1]}`)
@@ -673,11 +695,12 @@ function Dashboard({ onLogout, onNavigate }) {
                       )}
                     </div>
 
-                    {/* X-Axis labels */}
-                    <div className="rch-line-x-axis">
-                      {lineChartData[linePeriod].days.map((day) => (
-                        <span key={day}>{day}</span>
-                      ))}
+                      {/* X-Axis labels */}
+                      <div className="rch-line-x-axis">
+                        {lineChartData[linePeriod].days.map((day) => (
+                          <span key={day}>{day}</span>
+                        ))}
+                      </div>
                     </div>
 
                     {/* Legend */}

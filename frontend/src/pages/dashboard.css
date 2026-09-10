@@ -644,15 +644,22 @@
 /* Line Chart Body */
 .rch-line-chart-body {
   display: flex;
-  flex-direction: column;
-  height: 215px;
+  flex-wrap: wrap;
+  height: auto;
   position: relative;
   margin-top: 10px;
 }
 
+.rch-line-column-area {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
 .rch-svg-container {
   position: relative;
-  height: 170px;
+  height: 175px;
   width: 100%;
 }
 
@@ -686,8 +693,9 @@
   align-items: center;
   justify-content: center;
   gap: 18px;
-  margin-top: 12px;
+  margin-top: 14px;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .rch-legend-item {

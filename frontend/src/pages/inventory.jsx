@@ -178,6 +178,18 @@ function Inventory({ onLogout, onNavigate }) {
     if (itemId === "Dashboard" && onNavigate) {
       onNavigate("Dashboard");
     }
+    if (itemId === "Products" && onNavigate) {
+      onNavigate("Products");
+    }
+    if (itemId === "User Management" && onNavigate) {
+      onNavigate("User Management");
+    }
+    if (itemId === "Supplier Module" && onNavigate) {
+      onNavigate("Supplier Module");
+    }
+    if (itemId === "Settings" && onNavigate) {
+      onNavigate("Settings");
+    }
   }
 
   // Stock In Handler
