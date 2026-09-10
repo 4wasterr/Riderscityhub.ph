@@ -1,6 +1,6 @@
-/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import PropTypes from "prop-types";
 import "./forgotPassword.css";
 
 function ForgotPassword({ onBackToLogin }) {
@@ -98,5 +98,9 @@ function ForgotPassword({ onBackToLogin }) {
 		</main>
 	);
 }
+
+ForgotPassword.propTypes = {
+  onBackToLogin: PropTypes.func.isRequired,
+};
 
 export default ForgotPassword;
