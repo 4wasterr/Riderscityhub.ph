@@ -1,6 +1,6 @@
-/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import PropTypes from "prop-types";
 import loginBackground from "../../Images/f384a9d5e0d8b2ea1d2f6b821d32c9d1.jpg";
 import loginLogo from "../../Images/f0ac9f40cf82f0aee7252a575074eec5-Photoroom.png";
 import "./login.css";
@@ -21,9 +21,22 @@ function Login({ onForgotPassword, onLogin }) {
       return;
     }
 
-    setError("");
+    if (username.toLowerCase() === "admin" && password === "admin") {
+      setError("");
+      setSubmitting(false);
+      onLogin("admin");
+      return;
+    }
+
+    if (username.toLowerCase() === "cashier" && password === "cashier") {
+      setError("");
+      setSubmitting(false);
+      onLogin("cashier");
+      return;
+    }
+
+    setError("Invalid credentials. Use admin/admin or cashier/cashier.");
     setSubmitting(false);
-    onLogin();
   }
 
   return (
@@ -103,5 +116,10 @@ function Login({ onForgotPassword, onLogin }) {
     </main>
   );
 }
+
+Login.propTypes = {
+  onForgotPassword: PropTypes.func.isRequired,
+  onLogin: PropTypes.func.isRequired,
+};
 
 export default Login;

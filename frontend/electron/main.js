@@ -1,5 +1,8 @@
-import { app, BrowserWindow } from "electron";
+import { createRequire } from "module";
 import path from "path";
+
+const require = createRequire(import.meta.url);
+const { app, BrowserWindow } = require("electron");
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
