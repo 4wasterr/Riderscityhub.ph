@@ -32,8 +32,6 @@ app.get('/api/health', async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-=======
 // Generate next available user code based on role (ADM-001, CSH-001, ...)
 app.get('/api/users/next-code', async (req, res) => {
   const { role } = req.query;

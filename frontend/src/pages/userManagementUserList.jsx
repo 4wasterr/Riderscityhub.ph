@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { useState, useMemo } from "react";
-=======
 import { useState, useMemo, useEffect } from "react";
->>>>>>> 6100d319d0668c4baba2a82b8add1806e6294a78
 import PropTypes from "prop-types";
 import {
   Boxes,
@@ -22,10 +18,7 @@ import {
   X,
 } from "lucide-react";
 import "./userManagementUserList.css";
-<<<<<<< HEAD
 import { initialUsers } from "./userData";
-=======
->>>>>>> 6100d319d0668c4baba2a82b8add1806e6294a78
 
 const navItems = [
   { id: "Dashboard", label: "Dashboard", icon: Home },
@@ -42,12 +35,8 @@ function UserManagementUserList({ onLogout, onNavigate }) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [profileName, setProfileName] = useState("Admin");
 
-<<<<<<< HEAD
-  // Users state
+  // Users state — default to initialUsers, load from DB when available
   const [users, setUsers] = useState(initialUsers);
-=======
-  // Users state — loaded from DB
-  const [users, setUsers] = useState([]);
 
   // Load users from DB on mount
   useEffect(() => {
@@ -74,7 +63,6 @@ function UserManagementUserList({ onLogout, onNavigate }) {
       })
       .catch((err) => console.error('Failed to load users:', err));
   }, []);
->>>>>>> 6100d319d0668c4baba2a82b8add1806e6294a78
 
   // Filters
   const [searchQuery, setSearchQuery] = useState("");

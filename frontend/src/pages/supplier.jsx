@@ -120,6 +120,7 @@ function Supplier({ onLogout, onNavigate }) {
     if (itemId === "Products" && onNavigate) onNavigate("Products");
     if (itemId === "User Management" && onNavigate) onNavigate("User Management");
     if (itemId === "Supplier Module" && onNavigate) onNavigate("Supplier Module");
+    if (itemId === "Settings" && onNavigate) onNavigate("Settings");
   }
 
   // Open Edit Modal

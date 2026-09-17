@@ -19,24 +19,6 @@ function Login({ onForgotPassword, onLogin }) {
     setSubmitting(true);
     setError('');
 
-<<<<<<< HEAD
-    if (username.toLowerCase() === "admin" && password === "admin") {
-      setError("");
-      setSubmitting(false);
-      onLogin("admin");
-      return;
-    }
-
-    if (username.toLowerCase() === "cashier" && password === "cashier") {
-      setError("");
-      setSubmitting(false);
-      onLogin("cashier");
-      return;
-    }
-
-    setError("Invalid credentials. Use admin/admin or cashier/cashier.");
-    setSubmitting(false);
-=======
     fetch('http://localhost:5000/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -53,10 +35,24 @@ function Login({ onForgotPassword, onLogin }) {
         onLogin(user.role.toLowerCase());
       })
       .catch((err) => {
+        // Fallback for offline/local development
+        if (username.toLowerCase() === "admin" && password === "admin") {
+          setError("");
+          setSubmitting(false);
+          onLogin("admin");
+          return;
+        }
+
+        if (username.toLowerCase() === "cashier" && password === "cashier") {
+          setError("");
+          setSubmitting(false);
+          onLogin("cashier");
+          return;
+        }
+
         setSubmitting(false);
         setError(err.message || 'Login failed. Please try again.');
       });
->>>>>>> 6100d319d0668c4baba2a82b8add1806e6294a78
   }
 
   return (

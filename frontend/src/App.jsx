@@ -27,29 +27,32 @@ function App() {
   }, []);
 
   function handleNavigate(page) {
-    if (page === "Dashboard") {
-      window.location.hash = "dashboard";
-    } else if (page === "Inventory") {
-      window.location.hash = "inventory";
-    } else if (page === "Products") {
-      window.location.hash = "products";
-    } else if (page === "User Management") {
-      window.location.hash = "user-management";
-    } else if (page === "User List") {
-      window.location.hash = "user-list";
-    } else if (page === "User Audit Logs") {
-      window.location.hash = "user-audit-logs";
-    } else if (page === "User Archive") {
-      window.location.hash = "user-archive";
-    } else if (page === "Supplier Module") {
-      window.location.hash = "supplier";
-    } else if (page === "Settings") {
-      window.location.hash = "settings";
+    const routeMap = {
+      "Dashboard": "#dashboard",
+      "Inventory": "#inventory",
+      "Products": "#products",
+      "User Management": "#user-management",
+      "User List": "#user-list",
+      "User Audit Logs": "#user-audit-logs",
+      "User Archive": "#user-archive",
+      "Supplier Module": "#supplier",
+      "Supplier": "#supplier",
+      "Settings": "#settings",
+      "Settings Module": "#settings",
+    };
+
+    const targetHash = routeMap[page] || "#dashboard";
+    setCurrentHash(targetHash);
+    try {
+      window.location.hash = targetHash.replace("#", "");
+    } catch {
+      // ignore
     }
   }
 
   function handleLogout() {
     setIsAuthenticated(false);
+    setCurrentHash("");
     window.location.hash = "";
   }
 
@@ -57,8 +60,10 @@ function App() {
     setUserRole(role || "admin");
     setIsAuthenticated(true);
     if (role === "cashier") {
+      setCurrentHash("#cashier-dashboard");
       window.location.hash = "cashier-dashboard";
     } else {
+      setCurrentHash("#dashboard");
       window.location.hash = "dashboard";
     }
   }
@@ -69,7 +74,8 @@ function App() {
   const showUserList = isAuthenticated && currentHash === "#user-list";
   const showUserManagement = isAuthenticated && currentHash === "#user-management";
   const showSupplier = isAuthenticated && currentHash === "#supplier";
-  const showSettings = isAuthenticated && currentHash === "#settings";
+  const showSettings =
+    isAuthenticated && (currentHash === "#settings" || currentHash === "#settings-module");
   const showProducts = isAuthenticated && currentHash === "#products";
   const showInventory = isAuthenticated && currentHash === "#inventory";
   const showCashierDashboard =
