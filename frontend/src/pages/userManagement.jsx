@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useState, useMemo } from "react";
+=======
+import { useState, useMemo, useEffect, useCallback } from "react";
+>>>>>>> 6100d319d0668c4baba2a82b8add1806e6294a78
 import PropTypes from "prop-types";
 import {
   Boxes,
@@ -50,6 +54,12 @@ function UserManagement({ onLogout, onNavigate }) {
   // Modals
   const [modal, setModal] = useState(null);
 
+<<<<<<< HEAD
+=======
+  // Add User error state
+  const [addError, setAddError] = useState('');
+
+>>>>>>> 6100d319d0668c4baba2a82b8add1806e6294a78
   // Add User Form State
   const [addForm, setAddForm] = useState({
     userId: "",
@@ -65,6 +75,51 @@ function UserManagement({ onLogout, onNavigate }) {
     address: "",
   });
 
+<<<<<<< HEAD
+=======
+  // Fetch next sequential user code from the backend based on selected role
+  const fetchNextCode = useCallback((role) => {
+    const API = 'http://localhost:5000';
+    fetch(`${API}/api/users/next-code?role=${role}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code) {
+          setAddForm((prev) => ({ ...prev, userId: data.code }));
+        }
+      })
+      .catch((err) => console.error('Failed to fetch next user code:', err));
+  }, []);
+
+  // When the "add" modal opens, auto-populate User ID for the current role
+  useEffect(() => {
+    if (modal === 'add') {
+      fetchNextCode(addForm.role);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modal]);
+
+  // Load all users from DB on mount
+  useEffect(() => {
+    fetch('http://localhost:5000/api/users')
+      .then((res) => res.json())
+      .then((users) => {
+        if (!Array.isArray(users)) return;
+        const loaded = users.map((u, idx) => ({
+          id: u.user_code || `USR-${String(idx + 1).padStart(3, '0')}`,
+          userId: u.user_code || String(u.id),
+          username: u.username,
+          name: u.full_name || `${u.first_name} ${u.last_name}`.trim(),
+          role: u.role,
+          loginTime: new Date(u.created_at).toLocaleString(),
+          loginTimeout: '--:--',
+          status: u.status || 'Active',
+        }));
+        setActivities(loaded);
+      })
+      .catch((err) => console.error('Failed to load users:', err));
+  }, []);
+
+>>>>>>> 6100d319d0668c4baba2a82b8add1806e6294a78
   function handleNavClick(itemId) {
     setActiveNav(itemId);
     setIsSidebarOpen(false);
@@ -78,6 +133,7 @@ function UserManagement({ onLogout, onNavigate }) {
 
   function handleAddSubmit(e) {
     e.preventDefault();
+<<<<<<< HEAD
     const fullName = `${addForm.firstName} ${addForm.middleName ? addForm.middleName + " " : ""}${addForm.lastName}`.trim();
     const newActivity = {
       id: `LOG-${String(activities.length + 1).padStart(3, "0")}`,
@@ -105,6 +161,63 @@ function UserManagement({ onLogout, onNavigate }) {
       address: "",
     });
     setModal(null);
+=======
+    setAddError('');
+    const payload = {
+      userCode: addForm.userId,
+      username: addForm.username.trim(),
+      password: addForm.password,
+      role: addForm.role,
+      email: addForm.email,
+      phone: addForm.phone,
+      firstName: addForm.firstName,
+      middleName: addForm.middleName,
+      lastName: addForm.lastName,
+      address: addForm.address,
+    };
+    fetch('http://localhost:5000/api/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to create user');
+        return data;
+      })
+      .then((newUser) => {
+        const newActivity = {
+          id: `LOG-${String(activities.length + 1).padStart(3, '0')}`,
+          userId: newUser.user_code || newUser.id,
+          username: newUser.username,
+          name: `${newUser.first_name}${newUser.middle_name ? ' ' + newUser.middle_name : ''} ${newUser.last_name}`.trim(),
+          role: newUser.role,
+          loginTime: new Date().toLocaleString(),
+          loginTimeout: '--:--',
+          status: 'Active',
+        };
+        setActivities([newActivity, ...activities]);
+        setAddForm({
+          userId: '',
+          username: '',
+          firstName: '',
+          middleName: '',
+          lastName: '',
+          role: 'Cashier',
+          email: '',
+          phone: '',
+          password: '',
+          confirmPassword: '',
+          address: '',
+        });
+        setAddError('');
+        setModal(null);
+      })
+      .catch((err) => {
+        console.error('Add user error:', err.message);
+        setAddError(err.message || 'Something went wrong. Please try again.');
+      });
+>>>>>>> 6100d319d0668c4baba2a82b8add1806e6294a78
   }
 
   // Filtered Activities
@@ -532,18 +645,28 @@ function UserManagement({ onLogout, onNavigate }) {
 
             <form onSubmit={handleAddSubmit} className="rch-modal-form">
               <div className="rch-form-grid-2col">
+<<<<<<< HEAD
                 {/* Col 1: User ID */}
+=======
+                {/* Col 1: User ID — auto-generated, read-only */}
+>>>>>>> 6100d319d0668c4baba2a82b8add1806e6294a78
                 <div className="rch-field-group">
                   <label>User ID</label>
                   <input
                     type="text"
                     className="rch-field-input"
                     value={addForm.userId}
+<<<<<<< HEAD
                     onChange={(e) =>
                       setAddForm({ ...addForm, userId: e.target.value })
                     }
                     placeholder="e.g. CSH-005"
                     required
+=======
+                    readOnly
+                    placeholder="Auto-generated"
+                    style={{ backgroundColor: '#f0f0f0', color: '#888', cursor: 'not-allowed' }}
+>>>>>>> 6100d319d0668c4baba2a82b8add1806e6294a78
                   />
                 </div>
 
@@ -690,9 +813,17 @@ function UserManagement({ onLogout, onNavigate }) {
                     <select
                       className="rch-field-input rch-modal-select"
                       value={addForm.role}
+<<<<<<< HEAD
                       onChange={(e) =>
                         setAddForm({ ...addForm, role: e.target.value })
                       }
+=======
+                      onChange={(e) => {
+                        const newRole = e.target.value;
+                        setAddForm({ ...addForm, role: newRole });
+                        fetchNextCode(newRole);
+                      }}
+>>>>>>> 6100d319d0668c4baba2a82b8add1806e6294a78
                     >
                       <option value="Cashier">Cashier</option>
                       <option value="Admin">Admin</option>
@@ -705,6 +836,16 @@ function UserManagement({ onLogout, onNavigate }) {
                 <div className="rch-field-group" aria-hidden="true" />
               </div>
 
+<<<<<<< HEAD
+=======
+              {/* Error message */}
+              {addError && (
+                <p style={{ color: '#c0392b', background: '#fdecea', border: '1px solid #e74c3c', borderRadius: '6px', padding: '8px 12px', marginBottom: '10px', fontSize: '13px' }}>
+                  ⚠ {addError}
+                </p>
+              )}
+
+>>>>>>> 6100d319d0668c4baba2a82b8add1806e6294a78
               {/* Action Buttons */}
               <div className="rch-modal-actions">
                 <button type="submit" className="rch-btn-submit-orange">

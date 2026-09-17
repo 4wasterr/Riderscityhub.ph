@@ -16,11 +16,10 @@ function Login({ onForgotPassword, onLogin }) {
     const username = String(form.get("username") || "").trim();
     const password = String(form.get("password") || "");
 
-    if (!username || !password) {
-      setError("Please enter your username and password.");
-      return;
-    }
+    setSubmitting(true);
+    setError('');
 
+<<<<<<< HEAD
     if (username.toLowerCase() === "admin" && password === "admin") {
       setError("");
       setSubmitting(false);
@@ -37,6 +36,27 @@ function Login({ onForgotPassword, onLogin }) {
 
     setError("Invalid credentials. Use admin/admin or cashier/cashier.");
     setSubmitting(false);
+=======
+    fetch('http://localhost:5000/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Invalid credentials');
+        return data;
+      })
+      .then(({ user }) => {
+        setSubmitting(false);
+        // Pass the role (lowercase) so App.jsx can route correctly
+        onLogin(user.role.toLowerCase());
+      })
+      .catch((err) => {
+        setSubmitting(false);
+        setError(err.message || 'Login failed. Please try again.');
+      });
+>>>>>>> 6100d319d0668c4baba2a82b8add1806e6294a78
   }
 
   return (
