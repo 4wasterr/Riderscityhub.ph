@@ -12,10 +12,11 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "pg": "^8.23.0",
-    "bcrypt": "^5.1.0"
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.23.0"
   }
 }

@@ -1,146 +1,68 @@
-import { useEffect, useState } from "react";
-import CashierSideDashboard from "./pages/cashierSideDashboard";
-import Dashboard from "./pages/dashboard";
-import ForgotPassword from "./pages/forgotPassword";
-import Inventory from "./pages/inventory";
-import Login from "./pages/login";
-import Products from "./pages/products";
-import Settings from "./pages/settings";
-import Supplier from "./pages/supplier";
-import UserManagement from "./pages/userManagement";
-import UserManagementUserList from "./pages/userManagementUserList";
-import UserManagementAuditlogs from "./pages/userManagementAuditlogs";
-import UserArchive from "./pages/userArchive";
+import { useState, useEffect } from "react";
+import AuthLayout from "./layouts/AuthLayout";
+import StoreLayout from "./layouts/StoreLayout";
+import AdminLayout from "./layouts/AdminLayout";
 
+/**
+ * App is the top-level hierarchical router:
+ * - Unauthenticated users -> AuthLayout (Login, ForgotPassword)
+ * - Cashier role          -> StoreLayout (POS, Cashier Dashboard, Shift Reports)
+ * - Admin role            -> AdminLayout (Dashboard, Inventory, Products, Users, Supplier, Settings)
+ */
 function App() {
-  const [currentHash, setCurrentHash] = useState(window.location.hash);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const [userRole, setUserRole] = useState("admin"); // "admin" or "cashier"
+  const [userRole, setUserRole] = useState("admin"); // 'admin' or 'cashier'
 
   useEffect(() => {
     function handleHashChange() {
-      setCurrentHash(window.location.hash);
+      const hash = window.location.hash || "";
+      if (hash.startsWith("#cashier") || hash === "#pos" || hash === "#reports") {
+        setUserRole("cashier");
+      } else if (
+        hash.startsWith("#dashboard") ||
+        hash.startsWith("#inventory") ||
+        hash.startsWith("#products") ||
+        hash.startsWith("#settings") ||
+        hash.startsWith("#supplier") ||
+        hash.startsWith("#user")
+      ) {
+        setUserRole("admin");
+      }
     }
 
+    handleHashChange();
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
-  function handleNavigate(page) {
-    const routeMap = {
-      "Dashboard": "#dashboard",
-      "Inventory": "#inventory",
-      "Products": "#products",
-      "User Management": "#user-management",
-      "User List": "#user-list",
-      "User Audit Logs": "#user-audit-logs",
-      "User Archive": "#user-archive",
-      "Supplier Module": "#supplier",
-      "Supplier": "#supplier",
-      "Settings": "#settings",
-      "Settings Module": "#settings",
-    };
-
-    const targetHash = routeMap[page] || "#dashboard";
-    setCurrentHash(targetHash);
-    try {
-      window.location.hash = targetHash.replace("#", "");
-    } catch {
-      // ignore
+  function handleLogin(role) {
+    const assignedRole = (role || "admin").toLowerCase();
+    setUserRole(assignedRole);
+    setIsAuthenticated(true);
+    if (assignedRole === "cashier") {
+      window.location.hash = "cashier-dashboard";
+    } else {
+      window.location.hash = "dashboard";
     }
   }
 
   function handleLogout() {
     setIsAuthenticated(false);
-    setCurrentHash("");
     window.location.hash = "";
   }
 
-  function handleLogin(role) {
-    setUserRole(role || "admin");
-    setIsAuthenticated(true);
-    if (role === "cashier") {
-      setCurrentHash("#cashier-dashboard");
-      window.location.hash = "cashier-dashboard";
-    } else {
-      setCurrentHash("#dashboard");
-      window.location.hash = "dashboard";
-    }
+  // 1. Unauthenticated layout
+  if (!isAuthenticated) {
+    return <AuthLayout onLogin={handleLogin} />;
   }
 
-  const showForgotPassword = currentHash === "#forgot-password";
-  const showUserArchive = isAuthenticated && currentHash === "#user-archive";
-  const showUserAuditLogs = isAuthenticated && currentHash === "#user-audit-logs";
-  const showUserList = isAuthenticated && currentHash === "#user-list";
-  const showUserManagement = isAuthenticated && currentHash === "#user-management";
-  const showSupplier = isAuthenticated && currentHash === "#supplier";
-  const showSettings =
-    isAuthenticated && (currentHash === "#settings" || currentHash === "#settings-module");
-  const showProducts = isAuthenticated && currentHash === "#products";
-  const showInventory = isAuthenticated && currentHash === "#inventory";
-  const showCashierDashboard =
-    isAuthenticated && (userRole === "cashier" || currentHash === "#cashier-dashboard");
-  const showDashboard =
-    isAuthenticated &&
-    !showCashierDashboard &&
-    !showUserArchive &&
-    !showUserAuditLogs &&
-    !showUserList &&
-    !showUserManagement &&
-    !showSupplier &&
-    !showSettings &&
-    !showProducts &&
-    !showInventory &&
-    !showForgotPassword;
-
-  if (showCashierDashboard) {
-    return <CashierSideDashboard onLogout={handleLogout} onNavigate={handleNavigate} />;
+  // 2. Operational / Cashier layout
+  if (userRole === "cashier") {
+    return <StoreLayout onLogout={handleLogout} />;
   }
 
-  if (showUserArchive) {
-    return <UserArchive onLogout={handleLogout} onNavigate={handleNavigate} />;
-  }
-
-  if (showUserAuditLogs) {
-    return <UserManagementAuditlogs onLogout={handleLogout} onNavigate={handleNavigate} />;
-  }
-
-  if (showUserList) {
-    return <UserManagementUserList onLogout={handleLogout} onNavigate={handleNavigate} />;
-  }
-
-  if (showUserManagement) {
-    return <UserManagement onLogout={handleLogout} onNavigate={handleNavigate} />;
-  }
-
-  if (showSupplier) {
-    return <Supplier onLogout={handleLogout} onNavigate={handleNavigate} />;
-  }
-
-  if (showSettings) {
-    return <Settings onLogout={handleLogout} onNavigate={handleNavigate} />;
-  }
-
-  if (showProducts) {
-    return <Products onLogout={handleLogout} onNavigate={handleNavigate} />;
-  }
-
-  if (showInventory) {
-    return <Inventory onLogout={handleLogout} onNavigate={handleNavigate} />;
-  }
-
-  if (showDashboard) {
-    return <Dashboard onLogout={handleLogout} onNavigate={handleNavigate} />;
-  }
-
-  return showForgotPassword ? (
-    <ForgotPassword onBackToLogin={() => { window.location.hash = ""; }} />
-  ) : (
-    <Login
-      onForgotPassword={() => { window.location.hash = "forgot-password"; }}
-      onLogin={handleLogin}
-    />
-  );
+  // 3. Administrative layout
+  return <AdminLayout onLogout={handleLogout} />;
 }
 
 export default App;

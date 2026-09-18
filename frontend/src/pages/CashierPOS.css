@@ -1,0 +1,1049 @@
+/* Cashier POS / New Sale - Riders City Hub Design Spec */
+
+.rch-pos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Top Header Card (Matches media_1789738242317.png) */
+.rch-pos-header-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  box-sizing: border-box;
+}
+
+/* Main Content Card */
+.rch-pos-main-card,
+.rch-pos-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+/* Header */
+.rch-pos-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.rch-pos-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rch-pos-main-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.4px;
+  text-transform: uppercase;
+}
+
+.rch-pos-subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Upper Right Avatar & Profile Dropdown (Identical to Cashier Dashboard) */
+.rch-pos-profile-anchor {
+  position: relative;
+}
+
+.rch-pos-avatar-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #cbf3d2;
+  border: none;
+  color: #111827;
+  font-size: 17px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.rch-pos-avatar-btn:hover {
+  transform: scale(1.06);
+}
+
+.rch-pos-profile-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 210px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  border: 1px solid #f0f2f5;
+  padding: 8px;
+  z-index: 500;
+  animation: rchPosScale 0.15s ease-out;
+}
+
+.rch-pos-profile-dropdown-header {
+  padding: 8px 10px 10px;
+  border-bottom: 1px solid #f0f2f5;
+  display: flex;
+  flex-direction: column;
+}
+
+.rch-pos-profile-dropdown-header strong {
+  font-size: 14px;
+  color: #111827;
+}
+
+.rch-pos-profile-dropdown-header small {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.rch-pos-dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.12s ease;
+  box-sizing: border-box;
+}
+
+.rch-pos-dropdown-item:hover {
+  background: #f8f9fb;
+  color: #111827;
+}
+
+.rch-pos-dropdown-logout {
+  color: #ef4444;
+}
+
+.rch-pos-dropdown-logout:hover {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* Filters row */
+.rch-pos-filters-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.rch-pos-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 220px;
+}
+
+.rch-pos-search-icon {
+  position: absolute;
+  left: 12px;
+  color: #111827;
+  pointer-events: none;
+}
+
+.rch-pos-search-input {
+  width: 100%;
+  padding: 8px 14px 8px 36px;
+  background: #f1f2f4;
+  border: none;
+  border-radius: 12px;
+  font-size: 13px;
+  color: #111827;
+  outline: none;
+  box-sizing: border-box;
+  transition: box-shadow 0.15s;
+}
+
+.rch-pos-search-input:focus {
+  box-shadow: 0 0 0 2px rgba(255, 85, 0, 0.3);
+}
+
+.rch-pos-select {
+  background: #f1f2f4;
+  border: none;
+  border-radius: 12px;
+  padding: 8px 28px 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 13px;
+}
+
+/* Services Button */
+.rch-pos-services-btn {
+  background: #f1f2f4;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #374151;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.rch-pos-services-btn:hover {
+  background: #e5e7eb;
+}
+
+.rch-pos-services-btn.active {
+  background: #ff5500;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(255, 85, 0, 0.3);
+}
+
+/* Vehicle Brand Compatibility Active Indicator */
+.rch-pos-compat-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 12px;
+  padding: 8px 14px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: #065f46;
+  font-weight: 600;
+}
+
+.rch-pos-compat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 2px 6px;
+  margin-top: 4px;
+  width: fit-content;
+}
+
+.rch-pos-service-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 2px 6px;
+  margin-top: 4px;
+  width: fit-content;
+}
+
+/* 2-Column POS Body */
+.rch-pos-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 20px;
+  align-items: start;
+}
+
+/* Left: Catalog Grid */
+.rch-pos-catalog-column {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.rch-pos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.rch-pos-item-card {
+  background: #ffffff;
+  border: 1px solid #f0f2f5;
+  border-radius: 16px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 136px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+.rch-pos-item-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
+
+.rch-pos-item-sku {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.rch-pos-item-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  margin: 3px 0 2px 0;
+}
+
+.rch-pos-item-type {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.rch-pos-item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.rch-pos-item-price {
+  font-size: 12px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.rch-pos-add-btn {
+  background: #ff5500;
+  color: #ffffff;
+  border: none;
+  border-radius: 9999px;
+  padding: 6px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.rch-pos-add-btn:hover {
+  background: #e64d00;
+  transform: scale(1.04);
+}
+
+.rch-pos-add-btn:active {
+  transform: scale(0.96);
+}
+
+/* Catalog Footer Controls */
+.rch-pos-catalog-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  padding-top: 8px;
+}
+
+.rch-pos-clear-btn {
+  background: #18182c;
+  color: #ffffff;
+  border: none;
+  border-radius: 9999px;
+  padding: 9px 20px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s;
+}
+
+.rch-pos-clear-btn:hover {
+  background: #2b2b45;
+}
+
+.rch-pos-pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+
+.rch-pos-page-arrow {
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 6px;
+  transition: color 0.15s;
+}
+
+.rch-pos-page-arrow:hover:not(:disabled) {
+  color: #ff5500;
+}
+
+.rch-pos-page-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.rch-pos-page-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ff5500;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Right: Active Cart / Order Panel */
+.rch-pos-cart-panel {
+  background: #ffffff;
+  border: 1px solid #f0f2f5;
+  border-radius: 20px;
+  padding: 22px 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.rch-pos-cart-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  color: #111827;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.rch-pos-cart-customer {
+  font-size: 13px;
+  color: #111827;
+}
+
+.rch-pos-cart-customer strong {
+  font-weight: 700;
+}
+
+.rch-pos-cart-customer em {
+  font-style: italic;
+  color: #1f2937;
+}
+
+.rch-pos-cart-vehicle {
+  font-size: 12px;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: 0.2px;
+}
+
+/* Cart Items */
+.rch-pos-cart-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.rch-pos-cart-row {
+  background: #f1f2f4;
+  border-radius: 12px;
+  min-height: 42px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  font-size: 12px;
+}
+
+.rch-pos-cart-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 190px;
+  overflow: hidden;
+}
+
+.rch-pos-cart-item-title {
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rch-pos-cart-item-price {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.rch-pos-cart-steppers {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rch-pos-stepper-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 6px;
+  transition: transform 0.1s;
+}
+
+.rch-pos-stepper-btn:hover {
+  transform: scale(1.2);
+}
+
+.rch-pos-stepper-btn.minus {
+  color: #ef4444;
+}
+
+.rch-pos-stepper-btn.plus {
+  color: #10b981;
+}
+
+.rch-pos-cart-qty {
+  font-size: 12px;
+  font-weight: 700;
+  color: #111827;
+  min-width: 14px;
+  text-align: center;
+}
+
+.rch-pos-empty-cart {
+  background: #f9fafb;
+  border: 1px dashed #d1d5db;
+  border-radius: 12px;
+  padding: 24px 12px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+/* Payment Method Selection */
+.rch-pos-payment-heading {
+  margin: 6px 0 0;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  color: #111827;
+}
+
+.rch-pos-payment-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rch-pos-payment-btn {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.rch-pos-payment-btn:hover {
+  border-color: #d1d5db;
+  background: #f9fafb;
+}
+
+.rch-pos-payment-btn.active {
+  border: 1.5px solid #ff5500;
+  color: #ff5500;
+  background: #fff8f5;
+}
+
+/* Financial Breakdown */
+.rch-pos-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: #4b5563;
+  margin-top: 4px;
+}
+
+.rch-pos-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rch-pos-breakdown-divider {
+  border-top: 1px solid #e5e7eb;
+  margin: 4px 0;
+}
+
+.rch-pos-breakdown-total {
+  font-size: 15px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.rch-pos-discount-badge {
+  background: #fff7ed;
+  border: 1px solid #ffedd5;
+  color: #ea580c;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 1px 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.rch-pos-discount-badge:hover {
+  background: #ff5500;
+  color: #ffffff;
+  border-color: #ff5500;
+}
+
+.rch-pos-vat-section {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 6px 8px;
+  margin: 3px 0;
+}
+
+/* Discount Selector Card Buttons */
+.rch-pos-discount-opt {
+  background: #f9fafb;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: all 0.15s;
+}
+
+.rch-pos-discount-opt:hover {
+  border-color: #ff5500;
+  background: #fffaf7;
+}
+
+.rch-pos-discount-opt.active {
+  border-color: #ff5500;
+  background: #fff7ed;
+  box-shadow: 0 0 0 1px #ff5500;
+}
+
+.rch-pos-discount-opt strong {
+  font-size: 12px;
+  color: #111827;
+}
+
+.rch-pos-discount-opt small {
+  font-size: 10px;
+  color: #6b7280;
+}
+
+/* Quick Cash Denominations */
+.rch-pos-denom-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.rch-pos-denom-chip {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.rch-pos-denom-chip:hover {
+  background: #ff5500;
+  border-color: #ff5500;
+  color: #ffffff;
+}
+
+/* Thermal Receipt Paper & Print Styling */
+.rch-pos-receipt-card {
+  max-width: 400px;
+  padding: 22px;
+}
+
+.rch-pos-receipt-paper {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 14px 12px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 11px;
+  color: #111827;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.02);
+  line-height: 1.4;
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+.rch-pos-receipt-header {
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.rch-pos-receipt-store {
+  font-size: 14px;
+  font-weight: 900;
+  margin: 0 0 2px;
+  letter-spacing: 0.5px;
+}
+
+.rch-pos-receipt-header p {
+  margin: 1px 0;
+  font-size: 10px;
+  color: #4b5563;
+}
+
+.rch-pos-receipt-divider-dashed {
+  border-top: 1px dashed #9ca3af;
+  margin: 6px 0;
+}
+
+.rch-pos-receipt-divider-double {
+  border-top: 2px double #111827;
+  margin: 6px 0;
+}
+
+.rch-pos-receipt-meta {
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rch-pos-receipt-items {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 4px 0;
+}
+
+.rch-pos-receipt-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.rch-pos-receipt-item-name {
+  flex: 1;
+}
+
+.rch-pos-receipt-item-amount {
+  font-weight: 700;
+}
+
+.rch-pos-receipt-financials,
+.rch-pos-receipt-vat-box,
+.rch-pos-receipt-totals {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 10.5px;
+}
+
+.rch-pos-receipt-footer {
+  text-align: center;
+  margin-top: 6px;
+  font-size: 9.5px;
+  color: #4b5563;
+}
+
+.rch-pos-receipt-footer p {
+  margin: 2px 0;
+}
+
+/* Print Stylesheet */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  .rch-pos-receipt-paper,
+  .rch-pos-receipt-paper * {
+    visibility: visible !important;
+  }
+  .rch-pos-receipt-paper {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 80mm;
+    margin: 0;
+    padding: 10px;
+    border: none;
+    box-shadow: none;
+    max-height: none;
+  }
+}
+
+/* Pay Button */
+.rch-pos-pay-btn {
+  background: #ff5500;
+  color: #ffffff;
+  border: none;
+  border-radius: 9999px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 4px;
+  box-shadow: 0 4px 12px rgba(255, 85, 0, 0.28);
+  transition: background 0.15s, transform 0.1s;
+}
+
+.rch-pos-pay-btn:hover:not(:disabled) {
+  background: #e64d00;
+  transform: translateY(-1px);
+}
+
+.rch-pos-pay-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Checkout & Profile Modals */
+.rch-pos-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2500;
+  padding: 16px;
+  animation: rchPosFade 0.2s ease-out;
+}
+
+.rch-pos-modal-card {
+  background: #ffffff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 440px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  animation: rchPosScale 0.2s ease-out;
+}
+
+.rch-pos-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.rch-pos-modal-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.rch-pos-modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.rch-pos-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rch-pos-form-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.rch-pos-form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1.5px solid #d1d5db;
+  font-size: 13px;
+  font-family: inherit;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.rch-pos-form-input:focus {
+  border-color: #ff5500;
+}
+
+.rch-pos-preset-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.rch-pos-preset-chip {
+  background: #f1f2f4;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #374151;
+  transition: all 0.15s;
+}
+
+.rch-pos-preset-chip:hover {
+  background: #fff5f0;
+  border-color: #ff5500;
+  color: #ff5500;
+}
+
+@keyframes rchPosFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes rchPosScale {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Responsive adjustments for window resize / minimized / restored window */
+@media (max-width: 1250px) {
+  .rch-pos-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .rch-pos-body {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .rch-pos-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .rch-pos-cart-panel {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .rch-pos-card {
+    padding: 16px;
+    border-radius: 18px;
+  }
+  .rch-pos-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .rch-pos-header-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .rch-pos-filters-row {
+    gap: 8px;
+  }
+  .rch-pos-search-wrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .rch-pos-card {
+    padding: 12px;
+    border-radius: 14px;
+  }
+  .rch-pos-grid {
+    grid-template-columns: 1fr;
+  }
+  .rch-pos-main-title {
+    font-size: 19px;
+  }
+}

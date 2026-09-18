@@ -3,18 +3,30 @@ const express = require('express');
 const cors = require('cors');
 const pool = require('./db');
 
+// Modular Routers
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const supplierRoutes = require('./routes/supplierRoutes');
+const productRoutes = require('./routes/productRoutes');
+const settingsRoutes = require('./routes/settingsRoutes');
+const auditRoutes = require('./routes/auditRoutes');
+
 const app = express();
 
+// Global Middlewares
 app.use(cors());
 app.use(express.json());
 
+// Server status & root
 app.get('/', (req, res) => {
   res.json({
-    message: 'Backend server is running!'
+    name: 'Riders City Hub POS & Inventory API',
+    status: 'online',
+    version: '1.1.0'
   });
 });
 
-// Health check and database test endpoint
+// Database & server health check
 app.get('/api/health', async (req, res) => {
   try {
     const result = await pool.query('SELECT NOW() as current_time');
@@ -32,177 +44,34 @@ app.get('/api/health', async (req, res) => {
   }
 });
 
-// Generate next available user code based on role (ADM-001, CSH-001, ...)
-app.get('/api/users/next-code', async (req, res) => {
-  const { role } = req.query;
-  const prefix = role === 'Admin' ? 'ADM' : 'CSH';
-  try {
-    // Count existing users with the same prefix in user_code
-    const result = await pool.query(
-      `SELECT COUNT(*) AS total FROM users WHERE user_code LIKE $1`,
-      [`${prefix}-%`]
-    );
-    const next = parseInt(result.rows[0].total, 10) + 1;
-    const code = `${prefix}-${String(next).padStart(3, '0')}`;
-    res.json({ code });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Database error' });
-  }
+// Direct backwards-compatibility aliases for frontend endpoints
+app.post('/api/login', (req, res, next) => {
+  req.url = '/login';
+  authRoutes(req, res, next);
 });
 
-// New user creation endpoint
-const bcrypt = require('bcrypt');
+// Mount Modular Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/suppliers', supplierRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/settings', settingsRoutes);
+app.use('/api/audit', auditRoutes);
 
-// POST /api/login — authenticate against DB with bcrypt
-app.post('/api/login', async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) {
-    return res.status(400).json({ error: 'Missing username or password' });
-  }
-  try {
-    const result = await pool.query(
-      `SELECT * FROM users WHERE username = $1 AND status = 'Active' LIMIT 1`,
-      [username]
-    );
-    if (result.rows.length === 0) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-    const user = result.rows[0];
-    const match = await bcrypt.compare(password, user.password_hash);
-    if (!match) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-    // Return safe user info (no password_hash)
-    const { password_hash, ...safeUser } = user;
-    res.json({ user: safeUser });
-  } catch (err) {
-    console.error('POST /api/login error:', err.message);
-    res.status(500).json({ error: 'Database error' });
-  }
+// Central 404 handler
+app.use((req, res) => {
+  res.status(404).json({ error: `API route '${req.method} ${req.originalUrl}' not found` });
 });
 
-// GET /api/users — list all active users
-app.get('/api/users', async (req, res) => {
-  try {
-    const result = await pool.query(
-      `SELECT id, user_code, username, first_name, middle_name, last_name, full_name, email, phone, address, role, status, created_at
-       FROM users ORDER BY created_at DESC`
-    );
-    res.json(result.rows);
-  } catch (err) {
-    console.error('GET /api/users error:', err.message);
-    res.status(500).json({ error: 'Database error' });
-  }
+// Central error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Unhandled server error:', err);
+  res.status(500).json({
+    error: 'Internal server error',
+    message: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
 });
 
-app.post('/api/users', async (req, res) => {
-  const { userCode, username, password, role, email, phone, firstName, middleName, lastName, address } = req.body;
-  if (!username || !password || !firstName || !lastName || !email) {
-    return res.status(400).json({ error: 'Missing required fields (username, password, firstName, lastName, email)' });
-  }
-  try {
-    const passwordHash = await bcrypt.hash(password, 10);
-    // Build full_name from name parts
-    const fullName = [firstName, middleName, lastName].filter(Boolean).join(' ');
-    // Use the role-based code from frontend (e.g. CSH-001 / ADM-001)
-    const prefix = role === 'Admin' ? 'ADM' : 'CSH';
-    let code = userCode;
-    if (!code) {
-      const countRes = await pool.query(
-        `SELECT COUNT(*) AS total FROM users WHERE user_code LIKE $1`,
-        [`${prefix}-%`]
-      );
-      const next = parseInt(countRes.rows[0].total, 10) + 1;
-      code = `${prefix}-${String(next).padStart(3, '0')}`;
-    }
-    const result = await pool.query(
-      `INSERT INTO users (user_code, username, password_hash, role, email, phone, first_name, middle_name, last_name, full_name, address)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
-      [code, username, passwordHash, role, email, phone, firstName, middleName || null, lastName, fullName, address]
-    );
-    res.status(201).json(result.rows[0]);
-  } catch (err) {
-    console.error('POST /api/users error:', err.message);
-    if (err.code === '23505') {
-      return res.status(409).json({ error: 'Username, email, or user code already exists' });
-    }
-    res.status(500).json({ error: err.message || 'Database error' });
-  }
-});
-
-// New supplier creation endpoint
-app.post('/api/suppliers', async (req, res) => {
-  const { name, contactPerson, phone, email, address, status } = req.body;
-  if (!name || !phone) {
-    return res.status(400).json({ error: 'Missing required fields' });
-  }
-  try {
-    const supplierCode = `SUP-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-    const result = await pool.query(
-      `INSERT INTO suppliers (supplier_code, name, contact_person, phone, email, address, status)
-       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-      [supplierCode, name, contactPerson, phone, email, address, status || 'Active']
-    );
-    res.status(201).json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    if (err.code === '23505') {
-      return res.status(409).json({ error: 'Supplier already exists' });
-    }
-    res.status(500).json({ error: 'Database error' });
-  }
-});
-
-// New product creation endpoint
-app.post('/api/products', async (req, res) => {
-  const {
-    sku,
-    name,
-    category,
-    brand,
-    productType,
-    costPrice,
-    sellingPrice,
-    currentStock,
-    reorderLevel,
-    supplierId,
-    status,
-  } = req.body;
-  if (!sku || !name || !category || !brand) {
-    return res.status(400).json({ error: 'Missing required product fields' });
-  }
-  try {
-    const productCode = `PROD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-    const result = await pool.query(
-      `INSERT INTO products (product_code, sku, name, category, brand, product_type, cost_price, selling_price, current_stock, reorder_level, supplier_id, status)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *`,
-      [
-        productCode,
-        sku,
-        name,
-        category,
-        brand,
-        productType,
-        costPrice,
-        sellingPrice,
-        currentStock ?? 0,
-        reorderLevel ?? 10,
-        supplierId,
-        status || 'Active',
-      ]
-    );
-    res.status(201).json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    if (err.code === '23505') {
-      return res.status(409).json({ error: 'Product already exists' });
-    }
-    res.status(500).json({ error: 'Database error' });
-  }
-});
-
->>>>>>> 6100d319d0668c4baba2a82b8add1806e6294a78
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

@@ -8,15 +8,18 @@ import {
   Search,
   Send,
   ShoppingBag,
+  ShoppingCart,
   User,
   X,
 } from "lucide-react";
 import "./cashierSideDashboard.css";
+import CashierPOS from "./CashierPOS";
+import CashierReports from "./CashierReports";
 
 const cashierNavItems = [
   { id: "Dashboard", label: "Dashboard", icon: Home },
   { id: "POS / New Sale", label: "POS / New Sale", icon: ShoppingBag },
-  { id: "Reports", label: "Reports", icon: Receipt },
+  { id: "Reports", label: "Reports", icon: ShoppingCart },
 ];
 
 const barChartData = {
@@ -238,8 +241,9 @@ const initialTransactions = [
   },
 ];
 
-function CashierSideDashboard({ onLogout, onNavigate }) {
-  const [activeNav, setActiveNav] = useState("Dashboard");
+function CashierSideDashboard({ onLogout, onNavigate, activeModule }) {
+  const [activeNav, setActiveNav] = useState(activeModule || "Dashboard");
+  const [transactions, setTransactions] = useState(initialTransactions);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [barPeriod, setBarPeriod] = useState("Weekly");
@@ -253,6 +257,12 @@ function CashierSideDashboard({ onLogout, onNavigate }) {
   const [reportNote, setReportNote] = useState("");
 
   const profileRef = useRef(null);
+
+  useEffect(() => {
+    if (activeModule && activeModule !== activeNav) {
+      setActiveNav(activeModule);
+    }
+  }, [activeModule]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -274,14 +284,14 @@ function CashierSideDashboard({ onLogout, onNavigate }) {
   function handleNavClick(item) {
     setActiveNav(item.id);
     setIsSidebarOpen(false);
-    if (item.id === "POS / New Sale") {
-      triggerToast("Opening POS / New Sale Terminal...");
-    } else if (item.id === "Reports") {
-      triggerToast("Opening Cashier Daily Sales Report...");
-    }
     if (onNavigate) {
       onNavigate(item.id);
     }
+  }
+
+  function handleCompleteSale(newTrx) {
+    setTransactions((prev) => [newTrx, ...prev]);
+    triggerToast(`Sale ${newTrx.id} (${newTrx.amount}) recorded successfully!`);
   }
 
   function handleSendReportSubmit(e) {
@@ -291,7 +301,7 @@ function CashierSideDashboard({ onLogout, onNavigate }) {
     triggerToast("Daily Sales Report sent to Admin successfully!");
   }
 
-  const filteredTransactions = initialTransactions.filter((trx) => {
+  const filteredTransactions = transactions.filter((trx) => {
     const q = searchQuery.toLowerCase();
     return (
       trx.id.toLowerCase().includes(q) ||
@@ -359,11 +369,24 @@ function CashierSideDashboard({ onLogout, onNavigate }) {
         </div>
       </aside>
 
-      {/* Main Container */}
       <div className="rch-cs-main-container">
         <div className="rch-cs-canvas">
-          {/* Header Card (media_1789051095370.png) */}
-          <header className="rch-cs-header-card">
+          {activeNav === "POS / New Sale" ? (
+            <CashierPOS
+              onCompleteSale={handleCompleteSale}
+              onOpenSidebar={() => setIsSidebarOpen(true)}
+              onLogout={onLogout}
+            />
+          ) : activeNav === "Reports" ? (
+            <CashierReports
+              transactions={transactions}
+              onOpenSidebar={() => setIsSidebarOpen(true)}
+              onLogout={onLogout}
+            />
+          ) : (
+            <>
+              {/* Header Card (media_1789051095370.png) */}
+              <header className="rch-cs-header-card">
             <div className="rch-cs-header-left">
               <button
                 className="rch-cs-hamburger"
@@ -730,6 +753,8 @@ function CashierSideDashboard({ onLogout, onNavigate }) {
               </button>
             </div>
           </section>
+            </>
+          )}
         </div>
       </div>
 
@@ -885,6 +910,7 @@ function CashierSideDashboard({ onLogout, onNavigate }) {
 CashierSideDashboard.propTypes = {
   onLogout: PropTypes.func.isRequired,
   onNavigate: PropTypes.func,
+  activeModule: PropTypes.string,
 };
 
 export default CashierSideDashboard;
